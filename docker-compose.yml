@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: ci_demo_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ci_user
+      POSTGRES_PASSWORD: ci_password
+      POSTGRES_DB: ci_demo_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - ci_network
+
+  api:
+    build: ./api
+    container_name: ci_demo_api
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ci_user
+      DB_PASSWORD: ci_password
+      DB_NAME: ci_demo_db
+    ports:
+      - "3000:3000"
+    networks:
+      - ci_network
+
+networks:
+  ci_network:
+    driver: bridge
+
+volumes:
+  db_data:
