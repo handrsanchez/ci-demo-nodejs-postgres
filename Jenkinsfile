@@ -10,7 +10,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo '>>> Clonando repositorio...'
+                echo '>>> Clonando repositorio desde GitHub...'
                 checkout scm
             }
         }
@@ -34,10 +34,8 @@ pipeline {
         stage('Test') {
             steps {
                 echo '>>> Verificando que la API responde correctamente...'
-                bat '''
-                    curl -f %API_URL%/ || exit 1
-                    curl -f %API_URL%/status || exit 1
-                '''
+                bat 'curl -f %API_URL%/ || exit 1'
+                bat 'curl -f %API_URL%/status || exit 1'
                 echo '>>> API respondiendo correctamente. Pipeline exitoso.'
             }
         }
@@ -48,12 +46,10 @@ pipeline {
             echo '✔ Pipeline completado exitosamente. Integracion continua operativa.'
         }
         failure {
-            echo '✘ El pipeline fallo. Revisando logs...'
-            bat 'docker compose -f %COMPOSE_FILE% logs --tail=50'
+            echo '✘ El pipeline fallo. Revisar los logs de cada etapa.'
         }
         always {
-            echo '>>> Deteniendo contenedores al finalizar el pipeline...'
-            bat 'docker compose -f %COMPOSE_FILE% down'
+            echo '>>> Pipeline finalizado.'
         }
     }
 }
