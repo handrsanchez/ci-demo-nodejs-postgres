@@ -4,7 +4,7 @@ pipeline {
     environment {
         COMPOSE_FILE = 'docker-compose.yml'
         API_URL      = 'http://localhost:3000'
-        DOCKER_HOME  = 'C:\\Users\\julyy\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin'
+        DOCKER       = 'C:\\Users\\julyy\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe'
     }
 
     stages {
@@ -19,20 +19,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo '>>> Construyendo imagen Docker de la API...'
-                bat '''
-                    set PATH=%DOCKER_HOME%;%PATH%
-                    docker compose -f %COMPOSE_FILE% build --no-cache
-                '''
+                bat '"%DOCKER%" compose -f %COMPOSE_FILE% build --no-cache'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo '>>> Levantando contenedores (API + PostgreSQL)...'
-                bat '''
-                    set PATH=%DOCKER_HOME%;%PATH%
-                    docker compose -f %COMPOSE_FILE% up -d
-                '''
+                bat '"%DOCKER%" compose -f %COMPOSE_FILE% up -d'
                 echo '>>> Esperando que los servicios esten listos...'
                 bat 'ping -n 15 127.0.0.1 > nul'
             }
