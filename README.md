@@ -14,3 +14,9 @@ docker compose up -d --build
 docker ps
 curl http://localhost:3000/status
 ```
+
+```bash para windwos
+docker docker compose -f ci-demo-nodejs-postgres/docker-compose.yml up -d --build
+docker ps
+curl http://localhost:3000/status
+```
