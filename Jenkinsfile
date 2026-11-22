@@ -4,7 +4,7 @@ pipeline {
     environment {
         COMPOSE_FILE = 'docker-compose.yml'
         API_URL      = 'http://localhost:3000'
-        DOCKER       = 'C:\\Users\\julyy\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe'
+        DOCKER       = 'C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe'
     }
 
     stages {
